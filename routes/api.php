@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\WarehouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,6 @@ Route::prefix('orders')->group(function () {
     Route::post('{order}/cancel', [OrderController::class, 'cancel']);
     Route::post('{order}/resume', [OrderController::class, 'resume']);
 });
+
+Route::get('stock_movements', [StockMovementController::class, 'index']);
+

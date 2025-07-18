@@ -9,6 +9,11 @@ use Illuminate\Http\JsonResponse;
 
 class WarehouseController extends Controller
 {
+    /**
+     * Получить список всех складов.
+     *
+     * @return JsonResponse JSON-ответ с коллекцией складов.
+     */
     public function index(): JsonResponse
     {
         $warehouses = Warehouse::all();

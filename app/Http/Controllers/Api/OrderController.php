@@ -21,6 +21,12 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
+    /**
+     * Получить список заказов с фильтрами и пагинацией.
+     *
+     * @param Request $request HTTP-запрос с параметрами фильтрации.
+     * @return JsonResponse JSON-ответ со списком заказов.
+     */
     public function index(Request $request): JsonResponse
     {
         $query = Order::with(['items.product', 'warehouse']);
@@ -31,6 +37,12 @@ class OrderController extends Controller
         return response()->json(OrderResource::collection($orders));
     }
 
+    /**
+     * Создание нового заказа.
+     *
+     * @param StoreOrderRequest $request Валидированный запрос на создание заказа.
+     * @return JsonResponse JSON-ответ с созданным заказом или ошибкой.
+     */
     public function store(StoreOrderRequest $request): JsonResponse
     {
         try {
@@ -45,6 +57,13 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Обновление заказа (имя клиента и позиции).
+     *
+     * @param UpdateOrderRequest $request Валидированный запрос на обновление заказа.
+     * @param Order $order Модель заказа.
+     * @return JsonResponse JSON-ответ с обновлённым заказом или ошибкой.
+     */
     public function update(UpdateOrderRequest $request, Order $order): JsonResponse
     {
         try {
@@ -59,6 +78,12 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Завершение заказа (списание остатков).
+     *
+     * @param Order $order Модель заказа.
+     * @return JsonResponse JSON-ответ с обновлённым заказом или ошибкой.
+     */
     public function complete(Order $order): JsonResponse
     {
         try {
@@ -73,6 +98,12 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Отмена заказа (возврат остатков).
+     *
+     * @param Order $order Модель заказа.
+     * @return JsonResponse JSON-ответ с обновлённым заказом или ошибкой.
+     */
     public function cancel(Order $order): JsonResponse
     {
         try {
@@ -87,6 +118,12 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Возобновление отменённого заказа (повторное списание остатков).
+     *
+     * @param Order $order Модель заказа.
+     * @return JsonResponse JSON-ответ с обновлённым заказом или ошибкой.
+     */
     public function resume(Order $order): JsonResponse
     {
         try {
