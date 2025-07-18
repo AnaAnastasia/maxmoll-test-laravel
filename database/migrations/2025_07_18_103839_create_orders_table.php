@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('customer');
             $table->foreignId('warehouse_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['active', 'completed', 'canceled']);
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }

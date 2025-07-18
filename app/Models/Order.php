@@ -16,7 +16,11 @@ class Order extends Model
         'completed_at',
     ];
 
-    public $timestamps = false; //тк нас нет updated_at
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
 
     public function items(): HasMany
     {
