@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Stock;
+use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -69,6 +70,13 @@ class OrderService
                 }
 
                 $stock->decrement('stock', $item->count);
+
+                StockMovement::create([
+                    'product_id' => $item->product_id,
+                    'warehouse_id' => $order->warehouse_id,
+                    'delta' => - $item->count,
+                    'type' => 'order_complete',
+                ]);
             }
 
             $order->update([
@@ -101,6 +109,13 @@ class OrderService
                             'stock' => $item->count,
                         ]);
                     }
+
+                    StockMovement::create([
+                        'product_id' => $item->product_id,
+                        'warehouse_id' => $order->warehouse_id,
+                        'delta' => $item->count,
+                        'type' => 'order_cancel',
+                    ]);
                 }
             }
 
@@ -124,6 +139,15 @@ class OrderService
                 if (!$stock || $stock->stock < $item->count) {
                     throw new \Exception("Not enough stock to resume order for product ID {$item->product_id}");
                 }
+
+                $stock->decrement('stock', $item->count);
+
+                StockMovement::create([
+                    'product_id' => $item->product_id,
+                    'warehouse_id' => $order->warehouse_id,
+                    'delta' => - $item->count,
+                    'type' => 'order_resume',
+                ]);
             }
 
             $order->update(['status' => 'active']);
